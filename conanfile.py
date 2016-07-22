@@ -30,7 +30,7 @@ index 6f02fb6..bdc84e7 100644
 +    message(WARNING "Applying workaround for https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899")
 +    list(APPEND GRAPHICS_EXT_LIBS "-lgcc_s -lgcc")
  endif()
- 
+
  # define the sfml-graphics target
 """
 
@@ -96,18 +96,18 @@ class SFMLConanFile(ConanFile):
             else:
                 so_version = '.' + self.so_version
 
-            self.cpp_info.libs = map(
+            self.cpp_info.libs = list(map(
                 lambda name: name + ('-d' if self.settings.build_type == "Debug" else '') + so_version,
                 ['sfml-audio', 'sfml-graphics', 'sfml-network', 'sfml-window', 'sfml-system']
-            )
+            ))
         else:
-            self.cpp_info.libs = map(
+            self.cpp_info.libs = list(map(
                 lambda name: name + ('-d' if self.settings.build_type == "Debug" else ''),
-                map(
+                list(map(
                     lambda name: name + ('' if self.options.shared else '-s'),
                     ['sfml-audio', 'sfml-graphics', 'sfml-network', 'sfml-window', 'sfml-system']
-                )
-            )
+                ))
+            ))
         if not self.settings.os == "Windows":
             self.cpp_info.libs.append("pthread")
             self.cpp_info.libs.append("dl")
